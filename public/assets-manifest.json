@@ -1,0 +1,339 @@
+{
+ "version": 1,
+ "note": "Statuts : a-trouver · a-produire · valide · integre. Seuls valide/integre apparaissent dans la page Crédits. Les références ci-dessous sont des PISTES de recherche : ouvrir la page, vérifier licence et crédit, puis renseigner file/url exacte avant de passer à « valide ».",
+ "assets": [
+  {
+   "id": "TLL_BG_MENU_V01",
+   "title": "Horizon lunaire (fond du menu)",
+   "usage": [
+    "P01"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA Scientific Visualization Studio",
+    "url": "https://svs.gsfc.nasa.gov/3686"
+   },
+   "credit": "NASA/Goddard Space Flight Center Scientific Visualization Studio",
+   "license": "Contenu NASA, généralement sans copyright aux États-Unis ; vérifier les consignes d'usage",
+   "status": "a-trouver",
+   "notes": "Piste : survol du pôle sud (LRO/LOLA). Extraire une image fixe ; étalonnage froid."
+  },
+  {
+   "id": "TLL_IMG_RECRUIT_EARTHRISE_V01",
+   "title": "Terre se levant sur l'horizon lunaire (Recrutement)",
+   "usage": [
+    "P06"
+   ],
+   "kind": "photo",
+   "file": "",
+   "source": {
+    "name": "NASA Image and Video Library",
+    "url": "https://images.nasa.gov"
+   },
+   "credit": "NASA",
+   "license": "Contenu NASA, généralement sans copyright aux États-Unis ; vérifier les consignes d'usage",
+   "status": "a-trouver",
+   "notes": "Piste : Apollo 8, référence AS08-14-2383. Vérifier la fiche exacte."
+  },
+  {
+   "id": "TLL_MAP_BRIEFING_POLE_V01",
+   "title": "Carte du pôle sud (altitudes LOLA)",
+   "usage": [
+    "P07",
+    "P08"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA Scientific Visualization Studio",
+    "url": "https://svs.gsfc.nasa.gov/3633"
+   },
+   "credit": "NASA/Goddard Space Flight Center Scientific Visualization Studio",
+   "license": "Contenu NASA, généralement sans copyright aux États-Unis ; vérifier les consignes d'usage",
+   "status": "a-trouver",
+   "notes": "Fond du panneau Contexte (briefing)."
+  },
+  {
+   "id": "TLL_OBJ_MAPPING_V01",
+   "title": "Vignette objectif : cartographie",
+   "usage": [
+    "P08"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA LRO",
+    "url": "https://science.nasa.gov/lro/"
+   },
+   "credit": "NASA",
+   "license": "À vérifier",
+   "status": "a-trouver",
+   "notes": "Carte d'altitude colorée."
+  },
+  {
+   "id": "TLL_OBJ_ICE_V01",
+   "title": "Vignette objectif : glace (cratère polaire ombragé)",
+   "usage": [
+    "P08"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA Scientific Visualization Studio",
+    "url": "https://svs.gsfc.nasa.gov/"
+   },
+   "credit": "NASA/Goddard Space Flight Center Scientific Visualization Studio",
+   "license": "À vérifier",
+   "status": "a-trouver",
+   "notes": "Piste : visualisation du cratère Shackleton."
+  },
+  {
+   "id": "TLL_OBJ_THERMAL_V01",
+   "title": "Vignette objectif : thermique",
+   "usage": [
+    "P08"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA LRO",
+    "url": "https://science.nasa.gov/lro/"
+   },
+   "credit": "NASA",
+   "license": "À vérifier",
+   "status": "a-trouver",
+   "notes": "Carte de température de surface."
+  },
+  {
+   "id": "TLL_OBJ_COMPOSITION_V01",
+   "title": "Vignette objectif : composition",
+   "usage": [
+    "P08"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA LRO",
+    "url": "https://science.nasa.gov/lro/"
+   },
+   "credit": "NASA",
+   "license": "À vérifier",
+   "status": "a-trouver",
+   "notes": "Carte de couleur ou de minéraux."
+  },
+  {
+   "id": "REF_LIGHT_POLE_SHADOWS",
+   "title": "Référence d'éclairage : ombres au pôle sud",
+   "usage": [
+    "P13"
+   ],
+   "kind": "visualisation",
+   "file": "",
+   "source": {
+    "name": "NASA Scientific Visualization Studio",
+    "url": "https://svs.gsfc.nasa.gov/5027"
+   },
+   "credit": "NASA's Scientific Visualization Studio",
+   "license": "À vérifier",
+   "status": "a-trouver",
+   "notes": "Référence pour l'éclairage de la scène 3D (Soleil rasant) ; pas nécessairement intégrée."
+  },
+  {
+   "id": "TLL_BG_FALLBACK2D_V01",
+   "title": "Fond du repli 2D (illustration pré-rendue)",
+   "usage": [
+    "toutes"
+   ],
+   "kind": "rendu3d",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Version légère (< 300 ko)."
+  },
+  {
+   "id": "TLL_FX_PROLOGUE_SIGNAL_V01",
+   "title": "Signal radio et télémétrie (procédural)",
+   "usage": [
+    "P06"
+   ],
+   "kind": "procedural",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "CSS/canvas, sans image."
+  },
+  {
+   "id": "TLL_3D_ORBITER_V01",
+   "title": "Orbiteur modulaire (rendus et modèle)",
+   "usage": [
+    "P09",
+    "P11",
+    "P13",
+    "P21"
+   ],
+   "kind": "rendu3d",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Modèles NASA de sondes : références de proportions uniquement."
+  },
+  {
+   "id": "TLL_DOC_ARCHIVE_V01",
+   "title": "Documents d'archive fictifs d'Elias",
+   "usage": [
+    "P06",
+    "T04"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Aucune photo de personne réelle."
+  },
+  {
+   "id": "TLL_CHAR_MAYA_V01",
+   "title": "Portrait de Maya Moreau",
+   "usage": [
+    "P07",
+    "P08",
+    "P18"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Voir le brief des portraits."
+  },
+  {
+   "id": "TLL_CHAR_DANIEL_V01",
+   "title": "Portrait de Daniel Hayes",
+   "usage": [
+    "P07",
+    "P11",
+    "P18"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Voir le brief des portraits."
+  },
+  {
+   "id": "TLL_CHAR_NOAH_V01",
+   "title": "Portrait de Noah Williams",
+   "usage": [
+    "P07",
+    "P08",
+    "P18"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Voir le brief des portraits."
+  },
+  {
+   "id": "TLL_CHAR_AMARA_V01",
+   "title": "Portrait d'Amara Okafor",
+   "usage": [
+    "P07",
+    "P11",
+    "P18"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Voir le brief des portraits."
+  },
+  {
+   "id": "TLL_CHAR_ELIAS_V01",
+   "title": "Archive d'Elias Moreau (versions dégradées)",
+   "usage": [
+    "P06",
+    "T04",
+    "P19"
+   ],
+   "kind": "illustration",
+   "file": "",
+   "source": {
+    "name": "Interne"
+   },
+   "credit": "Équipe THE LAST LIGHT",
+   "license": "Création interne",
+   "status": "a-produire",
+   "notes": "Voir le brief des portraits."
+  },
+  {
+   "id": "TLL_3D_LRO_V01",
+   "title": "Lunar Reconnaissance Orbiter (modèle 3D)",
+   "usage": [
+    "P09",
+    "P11",
+    "P13",
+    "P16-P19",
+    "P20-P22"
+   ],
+   "kind": "modele-3d",
+   "file": "nasa/lro.glb",
+   "source": {
+    "name": "NASA 3D Resources",
+    "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/3D%20Models/Lunar%20Reconnaissance%20Orbiter%20(A)"
+   },
+   "credit": "NASA",
+   "license": "NASA 3D Resources : libre d'utilisation, sans copyright ; ne pas suggérer d'approbation de la NASA ni utiliser son logo (consignes d'usage des médias NASA)",
+   "status": "integre",
+   "notes": "glTF compressé Draco (décodeur three.js copié dans public/draco). Ailes, radar, antenne et réservoir ajoutés procéduralement selon la configuration."
+  },
+  {
+   "id": "TLL_TEX_MOON_V01",
+   "title": "Carte de la Lune (dérivée)",
+   "usage": [
+    "Scène 3D"
+   ],
+   "kind": "texture",
+   "file": "nasa/moon-map.jpg",
+   "source": {
+    "name": "NASA 3D Resources — Images and Textures/Moon",
+    "url": "https://github.com/nasa/NASA-3D-Resources/tree/master/Images%20and%20Textures/Moon"
+   },
+   "credit": "NASA (photographie) ; reprojection équirectangulaire THE LAST LIGHT",
+   "license": "NASA 3D Resources : libre d'utilisation, sans copyright ; ne pas suggérer d'approbation de la NASA ni utiliser son logo (consignes d'usage des médias NASA)",
+   "status": "integre",
+   "notes": "Reprojetée depuis une photo de la face visible : la face cachée est un MIROIR de la face visible. À remplacer par la mosaïque LROC WAC (NASA SVS « CGI Moon Kit ») dès que le réseau le permet."
+  }
+ ]
+}
