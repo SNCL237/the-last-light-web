@@ -460,3 +460,26 @@ html { background:#07060f; }
 .part-card dt { font-size:10px; color:var(--text-2); text-transform:uppercase; letter-spacing:.06em; } .part-card dd { margin:0; font:12px var(--mono); }
 
 .orbiter-tag > .muted { padding:4px 10px; border-radius:6px; background:rgb(7 6 15/.72); backdrop-filter:blur(6px); }
+
+/* --- Création de la recrue --- */
+.rec-grid { display:grid; grid-template-columns:minmax(0, 1fr) 300px; gap:12px; align-items:start; }
+.rec-n { display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; border:1px solid var(--accent); color:var(--accent); font-size:11px; margin-right:2px; }
+.rec-label { display:block; font-size:13px; margin-bottom:6px; } .rec-name { font-size:16px; min-height:44px; }
+.rec-name[aria-invalid="true"] { border-color:var(--crit); } .rec-err { color:#ff9c9d; font-size:12px; margin:4px 0 0; } .rec-name + .muted { margin-top:4px; }
+.rec-roles { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:8px; margin-bottom:8px; }
+.rec-role { display:flex; flex-direction:column; gap:6px; padding:12px; border:1px solid var(--hair); border-radius:8px; cursor:pointer; background:rgb(255 255 255/.02); }
+.rec-role:hover { border-color:var(--hair-strong); } .rec-role.is-on { border-color:var(--accent); background:rgb(242 107 29/.08); box-shadow:0 0 0 1px var(--accent); }
+.rec-role.is-off { opacity:.5; cursor:not-allowed; } .rec-role:focus-within { outline:2px solid var(--accent); outline-offset:2px; }
+.rec-role-h { display:flex; align-items:center; gap:10px; } .rec-role-h strong { flex:1; font-size:14px; }
+.rec-pitch { font-size:13px; } .rec-role ul { margin:0; padding-left:18px; color:var(--text-2); font-size:12px; }
+.rec-meta { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:12px; border-top:1px solid var(--hair); padding-top:6px; }
+.rec-meta > span { display:flex; flex-direction:column; gap:2px; } .rec-meta small { color:var(--text-2); font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
+.avatar-mini { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:50%; background:rgb(124 196 255/.2); color:var(--info); font:600 9px var(--sans); font-style:normal; margin-right:4px; vertical-align:middle; }
+.rec-emblems { display:grid; grid-template-columns:repeat(auto-fill, minmax(84px, 1fr)); gap:8px; }
+.rec-emblem { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px; border:1px solid var(--hair); border-radius:8px; cursor:pointer; font-size:12px; color:var(--text-2); }
+.rec-emblem.is-on { border-color:var(--accent); color:var(--text-1); background:rgb(242 107 29/.08); } .rec-emblem:focus-within { outline:2px solid var(--accent); outline-offset:2px; }
+.rec-badge { position:sticky; top:12px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; padding:18px 16px; }
+.rec-badge-k { font-size:10px; color:var(--text-2); letter-spacing:.08em; text-transform:uppercase; margin:0 0 6px; }
+.rec-badge-name { margin:6px 0 0; font-size:20px; font-weight:700; word-break:break-word; } .rec-badge-role { margin:0; color:var(--accent); font-weight:600; }
+.rec-badge-a { margin-top:10px; width:100%; display:flex; justify-content:center; } .rec-badge-a .action { flex-direction:column-reverse; align-items:center; } .rec-badge-a .action-why { text-align:center; }
+@media (max-width:900px) { .rec-grid { grid-template-columns:1fr; } .rec-badge { position:static; order:-1; } }

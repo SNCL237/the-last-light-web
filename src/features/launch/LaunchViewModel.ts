@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { LAUNCHERS, ORBIT_PRESETS, type MissionState, type OrbitChoice, type OrbitKind } from '../../domain/mission';
 import { launchCheck, totals } from '../../domain/sim';
 import { sceneStore } from '../../scene/sceneStore';
@@ -52,7 +53,7 @@ export class LaunchViewModel extends MissionViewModel<LaunchExtra> {
     this.setState({ orbit: o }); this.sync();
   };
   capacityKg = () => (this.srv && this.getState().orbitId ? this.srv.launcherCapacity(this.getState().launcherId, this.getState().orbitId!) : this.launcher().capacityKg);
-  launchAvailability() { if (this.getState().busy) return { ok: false, reason: 'Vérification serveur…' }; const e = this.issues.filter((i) => i.severity === 'error'); return e.length ? { ok: false, reason: `Lancement impossible : ${e[0].title.toLowerCase()}.` } : { ok: true }; }
+  launchAvailability() { if (this.getState().busy) return { ok: false, reason: t('Vérification serveur…') }; const e = this.issues.filter((i) => i.severity === 'error'); return e.length ? { ok: false, reason: `Lancement impossible : ${e[0].title.toLowerCase()}.` } : { ok: true }; }
   requestLaunch = () => { if (this.launchAvailability().ok) this.setState({ confirm: true }); };
   cancel = () => this.setState({ confirm: false });
   toggleCheckpoint = () => this.setState({ checkpoint: !this.getState().checkpoint });
@@ -63,7 +64,7 @@ export class LaunchViewModel extends MissionViewModel<LaunchExtra> {
     this.record({ code: 'EVT-A3-001', trace: 'launch_configuration', data: { launcher: s.launcherId, orbit: s.orbit } });
     this.record({ code: 'EVT-A3-002', trace: 'launch_validation', data: { warnings: this.issues.map((i) => i.code) } });
     let checkpoints = this.m.checkpoints;
-    if (s.checkpoint) { const { checkpoints: _c, ...snapshot } = this.m; void _c; checkpoints = [...checkpoints.filter((c) => c.id !== 'pre-launch'), { id: 'pre-launch', label: 'Avant le lancement', at: new Date().toISOString(), snapshot: { ...snapshot, launch } }]; }
+    if (s.checkpoint) { const { checkpoints: _c, ...snapshot } = this.m; void _c; checkpoints = [...checkpoints.filter((c) => c.id !== 'pre-launch'), { id: 'pre-launch', label: t('Avant le lancement'), at: new Date().toISOString(), snapshot: { ...snapshot, launch } }]; }
     if (this.srv && this.m.server) {
       try { const r = await this.srv.advanceTo(this.m.server, 3); await this.commit({ ...this.m, server: { ...this.m.server, act: r.acte } }); }
       catch (e) { this.fail(e); this.setState({ confirm: false }); return; }

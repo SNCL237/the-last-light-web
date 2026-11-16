@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import type { Line, Scene } from '../../domain/narrative';
 import type { CampaignRepository, EventRecorder, Navigator, ScriptRepository } from '../../domain/ports';
@@ -38,7 +39,7 @@ export class PrologueViewModel extends Store<PrologueState> {
       this.campaignId = (await this.campaigns.getLatest().catch(() => null))?.id;
       this.setState({ status: 'ready', scenes });
       this.enter(0);
-    } catch { this.setState({ status: 'error', error: 'Impossible de charger le prologue.' }); }
+    } catch { this.setState({ status: 'error', error: t('Impossible de charger le prologue.') }); }
   };
   retry = (): Promise<void> => { this.started = false; this.setState({ status: 'loading', error: undefined }); return this.init(); };
 

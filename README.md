@@ -150,3 +150,12 @@ Parcours de bout en bout (Playwright, avec le serveur et `vite preview` sur le p
 - **Vue éclatée 3D (scène 2.2)** (`scene/engine.ts`) : une pièce par composant, forme selon le rôle, couleur selon le sous-système, liens vers le corps. Cadrage fixe pour viser les pièces, tolérance de survol de 250 ms.
 - **Lien dans les deux sens** : survoler une pièce affiche sa fiche flottante et surligne sa ligne ; survoler une ligne fait briller la pièce.
 - Les aides de l'atelier n'ont plus qu'une source de vérité : la préférence `help` (page Options).
+
+## Langue : français / anglais (US)
+- Réglage : **Options → Langue et audio** (`fr` ou `English (US)`), appliqué tout de suite, sans perdre la partie, et mémorisé dans `tll.prefs`.
+- `src/i18n/index.ts` : `t(fr)` (le texte français sert de clé), `tf(fr, {vars})` pour les phrases à variables, `tc(ctx, fr)` quand un même mot change de sens (`undo|Annuler` → *Undo*), `tmap({...})` pour les tables de libellés, `locale()` pour les nombres et dates.
+- `src/i18n/en.ts` : dictionnaire FR → EN-US (~1 150 entrées). Une clé absente retombe sur le français : rien ne casse, mais le texte reste en français.
+- Messages d'erreur du serveur : `data/backend/api.ts` (`MESSAGES` / `MESSAGES_EN`, choisis selon la langue).
+- Outils : `node tools/i18n-extract.mjs src keys.json` (liste des textes) ; `node tools/i18n-scan.mjs` (textes français non passés à `t()`) ; `node tools/i18n-wrap2.mjs` (balisage automatique, à relire).
+- Ajouter un texte : écrire `t("Texte français")` puis ajouter `"Texte français": "English text"` dans `en.ts`.
+- Limites connues : le journal de l'atelier et les points de reprise gardent la langue où ils ont été écrits ; noms propres et sigles non traduits.

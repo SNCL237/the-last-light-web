@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import type { CrisisOption, MissionState } from '../../domain/mission';
 import { hoursToThreshold, optionAvailability, simulateRest, totals } from '../../domain/sim';
 import { sceneStore } from '../../scene/sceneStore';
@@ -31,7 +32,7 @@ export class CrisisViewModel extends MissionViewModel<CrisisExtra> {
   get serverMode() { return !!this.srv; }
   reason = (o: CrisisOption) => {
     const c = this.getState().chosen; if (c.includes(o)) return null;
-    if (this.srv && c.length) return 'Le serveur accepte une seule décision par crise.';
+    if (this.srv && c.length) return t('Le serveur accepte une seule décision par crise.');
     return optionAvailability(this.m, c, o);
   };
   toggle = (o: CrisisOption) => { const c = this.getState().chosen; if (c.includes(o)) this.setState({ chosen: c.filter((x) => x !== o) }); else if (!this.reason(o)) this.setState({ chosen: [...c, o] }); };

@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import type { ReportArchive, ReportSummary } from '../../domain/ports';
 import { OBJECTIVE_OF, type ServerGateway } from '../../data/backend/ServerGateway';
@@ -26,10 +27,10 @@ export class ReportsViewModel extends Store<ReportsState> {
             return { ...(known ?? { at: '', primary: m.principal ? OBJECTIVE_OF[m.principal] ?? 'ice' : 'ice' }), id: m.id, score: Math.round(m.scoreTotal), scale: 1000, source: 'serveur', ending: ENDING_OF[m.fin] ?? 'silence',
               categories: Object.fromEntries(SERVER_CATS.map(([k, l]) => [l, Math.round(m.scores[k] ?? 0)])), maxima: Object.fromEntries(SERVER_CATS.map(([, l, mx]) => [l, mx])) } as ReportSummary; });
           merged = [...fromServer, ...local.filter((r) => !fromServer.some((s) => s.id === r.id))];
-        } catch { serverNote = 'Serveur injoignable : seuls les rapports de ce navigateur sont affichés.'; }
+        } catch { serverNote = t('Serveur injoignable : seuls les rapports de ce navigateur sont affichés.'); }
       }
       this.setState({ status: 'ready', reports: merged, serverNote, selected: merged[0]?.id ?? null });
-    } catch { this.setState({ status: 'error', error: 'Impossible de lire les rapports.' }); }
+    } catch { this.setState({ status: 'error', error: t('Impossible de lire les rapports.') }); }
   };
   sorted = (): ReportSummary[] => {
     const { reports, sort } = this.getState();

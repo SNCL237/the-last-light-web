@@ -1,4 +1,5 @@
 import { RepositoryError } from '../../domain/ports';
+import { getLang, locale } from '../../i18n';
 
 /** Erreur normalisée du backend : `{ code, params, statut }` (aucun texte joueur côté serveur). */
 export class ApiError extends RepositoryError {
@@ -7,7 +8,7 @@ export class ApiError extends RepositoryError {
   }
 }
 
-const n = (v: unknown, d = 0) => (typeof v === 'number' ? v.toLocaleString('fr-FR', { maximumFractionDigits: d }) : String(v ?? '?'));
+const n = (v: unknown, d = 0) => (typeof v === 'number' ? v.toLocaleString(locale(), { maximumFractionDigits: d }) : String(v ?? '?'));
 /** Textes joueur des codes C7 (le registre serveur /pedagogie reste générique). */
 const MESSAGES: Record<string, (p: Record<string, unknown>) => string> = {
   OBJECTIF_PRINCIPAL_REQUIS: () => 'Choisissez un objectif principal.',
@@ -63,7 +64,62 @@ const MESSAGES: Record<string, (p: Record<string, unknown>) => string> = {
   ERREUR_INTERNE: () => 'Erreur interne du serveur.',
   RESEAU: () => 'Connexion au serveur impossible.', DELAI: () => 'Le serveur ne répond pas.',
 };
+const MESSAGES_EN: Record<string, (p: Record<string, unknown>) => string> = {
+  OBJECTIF_PRINCIPAL_REQUIS: () => 'Choose a primary objective.',
+  OBJECTIFS_SECONDAIRES_ABSENTS: () => 'No secondary objective: allowed, but the mission will be less rich.',
+  OBJECTIFS_TROP_NOMBREUX: () => 'Too many objectives for this level.',
+  NIVEAU_OBJECTIFS_INVALIDE: (p) => `This level allows ${n(p.maximum)} secondary objective(s).`,
+  OBJECTIFS_INSTRUMENT_REQUIS: () => 'An objective has no instrument able to measure it.',
+  OBJECTIF_INSTRUMENT_INVALIDE: () => 'This instrument does not serve the stated objective.',
+  OPTION_INDISPONIBLE: () => 'Option unavailable at this level or incompatible.',
+  LANCEUR_REQUIS: () => 'Choose a launcher.',
+  ORBITE_REQUISE: () => 'Choose an orbit.',
+  ORBITE_INACCESSIBLE: () => 'This launcher cannot reach this orbit.',
+  MASSE_DEPASSE: (p) => `Mass exceeds launcher capacity${p.ecartKg !== undefined ? ` (over by ${n(p.ecartKg, 1)} kg)` : ''}.`,
+  MARGE_FAIBLE: () => 'Low mass margin.',
+  PUISSANCE_ALERTE: (p) => `Power at ${n(p.pourcentage)}% of average orbital output (shadow included).`,
+  PUISSANCE_DEPASSEE: (p) => `Consumption (${n(p.consommeeW, 1)} W) exceeds average orbital output (${n(p.produiteMoyenneW ?? p.produiteW, 1)} W).`,
+  BATTERIE_INSUFFISANTE: () => 'Battery too small to get through the lunar shadow.',
+  BUDGET_ALERTE: (p) => `Budget ${n(p.pourcentage)}% used.`,
+  BUDGET_DEPASSE: (p) => `Budget exceeded${p.coutMUSD !== undefined ? `: $${n(p.coutMUSD)}M for $${n(p.budgetMUSD)}M` : ''}.`,
+  BUDGET_MARGE_FAIBLE: () => 'Low budget margin.',
+  DV_INSUFFISANT: () => 'Insufficient Δv for orbit insertion and maintenance.',
+  PROPULSION_CONFIGURATION_INVALIDE: () => 'Invalid propulsion configuration.',
+  PISTE_REDUIS_MASSE: () => 'Hint: reduce mass.', PISTE_AUTRE_ORBITE: () => 'Hint: choose another orbit.', PISTE_AUTRE_LANCEUR: () => 'Hint: choose another launcher.',
+  CONFIGURATION_NON_VALIDEE: (p) => `Configuration not validated by the server (${n(p.erreurs)} error(s)).`,
+  DECISION_ATTENDUE: () => 'A crisis decision is required before continuing.',
+  DECISION_CRISE_ABSENTE: () => 'No crisis is awaiting a decision.',
+  SIMULATION_TERMINEE: () => 'The simulation is over.',
+  ANOMALIE_ENERGETIQUE: () => 'Power anomaly detected.',
+  SCIENCE_INCOMPLETE: (p) => `Incomplete science (${n(Number(p.progression) * 100)}%).`,
+  MARGES_TECHNIQUES_FAIBLES: () => 'Low technical margins during the mission.',
+  DONNEES_PERDUES: () => 'Some data were lost.',
+  FIABILITE_FAIBLE: () => 'Low orbiter reliability.',
+  RISQUE_ACCRU: () => 'The mission continued at increased risk.',
+  OBJECTIFS_NON_ATTEINTS: () => 'Some objectives were not met.',
+  MISSION_ECOURTEE: () => 'The mission was cut short.',
+  MISSION_PERDUE: () => 'The mission is lost.',
+  RECOMMANDATION_SCIENCE: () => 'Pair each objective with a suitable instrument and observe longer.',
+  RECOMMANDATION_ENERGIE: () => 'Plan a power margin for shadow and degradation.',
+  RECOMMANDATION_DONNEES: () => 'Balance data produced with transmission capacity.',
+  RECOMMANDATION_FIABILITE: () => 'Choose more reliable or redundant components.',
+  RECOMMANDATION_BUDGET: () => 'Keep a budget reserve.',
+  RECOMMANDATION_OBJECTIFS: () => 'Reduce the number of objectives or equip them better.',
+  ACTE_INVALIDE: (p) => `Step unavailable (current act ${n(p.acteActuel)}).`,
+  MISSION_INCONNUE: () => 'Mission not found on the server.',
+  MISSION_DEJA_TERMINEE: () => 'This mission is already over.',
+  MISSION_NON_PRETE: () => 'The mission has not launched yet.',
+  MISSION_NON_TERMINEE: () => 'The mission is not over.',
+  SCENARIO_VERROUILLE: () => 'Scenario locked.',
+  VERSION_EPINGLEE_INDISPONIBLE: () => 'Catalog or scenario version unavailable on the server.',
+  CATALOGUE_VERSION_INCONNUE: (p) => `Catalog ${n(p.version)} missing from the server (admin import required).`,
+  AUTH_REQUISE: () => 'Session expired.', JETON_INVALIDE: () => 'Invalid session.', ROLE_INTERDIT: () => 'Access denied.',
+  ENTREE_INVALIDE: (p) => `Request rejected by the server (${String(p.champs ?? p.champ ?? 'input')}).`,
+  ERREUR_INTERNE: () => 'Internal server error.',
+  RESEAU: () => 'Cannot connect to the server.', DELAI: () => 'The server is not responding.',
+};
 export function messageFor(code: string, params: Record<string, unknown> = {}): string {
+  if (getLang() === 'en') return MESSAGES_EN[code]?.(params) ?? `Server error (${code}).`;
   return MESSAGES[code]?.(params) ?? `Erreur serveur (${code}).`;
 }
 

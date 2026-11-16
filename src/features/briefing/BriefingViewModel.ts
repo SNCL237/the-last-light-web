@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import type { BriefingContent, BriefingTab, Posture, StanceId } from '../../domain/briefing';
 import { RepositoryError, type BriefingRepository, type CampaignRepository, type EventRecorder, type Navigator, type NarrativeStateRepository } from '../../domain/ports';
@@ -12,7 +13,7 @@ export const selectedPosture = (s: BriefingState): Posture | undefined => s.cont
 /** Continuer : posture choisie ; sinon « Passer sans choisir » (explicite). Pas de double validation. */
 export function continueAvailability(s: BriefingState): { enabled: boolean; reason?: string } {
   if (s.submitting) return { enabled: false, reason: 'Enregistrement…' };
-  if (!s.stance) return { enabled: false, reason: 'Choisissez une posture, ou passez explicitement cette étape.' };
+  if (!s.stance) return { enabled: false, reason: t('Choisissez une posture, ou passez explicitement cette étape.') };
   return { enabled: true };
 }
 
@@ -31,7 +32,7 @@ export class BriefingViewModel extends Store<BriefingState> {
       const content = await this.briefing.getBriefing();
       this.campaignId = (await this.campaigns.getLatest().catch(() => null))?.id;
       this.setState({ status: 'ready', content });
-    } catch { this.setState({ status: 'error', error: 'Impossible de charger le briefing.' }); }
+    } catch { this.setState({ status: 'error', error: t('Impossible de charger le briefing.') }); }
   };
   retry = (): Promise<void> => { this.started = false; this.setState({ status: 'loading', error: undefined }); return this.init(); };
 

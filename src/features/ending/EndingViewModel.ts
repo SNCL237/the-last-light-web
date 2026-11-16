@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { ROUTES, type MissionState } from '../../domain/mission';
 import type { ReportArchive, ReportSummary } from '../../domain/ports';
 import { determineEnding, objectiveAchievement, score, type ScoreLine } from '../../domain/sim';
@@ -41,13 +42,13 @@ export class EndingViewModel extends MissionViewModel<EndingExtra> {
       await this.srv!.advanceTo(m.server!, 6);
       // Relecture : idempotent même si un autre appel a déjà clôturé la mission.
       const r = await this.srv!.readMission(m.server!.missionId) as unknown as { acte: number; bilan?: { scoreTotal: number; fin: 'A' | 'B' | 'C' | 'D'; scores: Record<string, number>; causes: ServerSnapshot['bilan'] extends infer B ? B extends { causes: infer C } ? C : never : never; recommandations: { pourquoi: { code: string; params: Record<string, unknown> }; piste: { code: string; params: Record<string, unknown> } }[] }; rapportJson?: string | null };
-      if (!r.bilan) throw new Error('Le serveur n\u2019a pas renvoyé de bilan.');
+      if (!r.bilan) throw new Error(t('Le serveur n\u2019a pas renvoyé de bilan.'));
       let missionsReelles: string[] | undefined;
       try { missionsReelles = r.rapportJson ? JSON.parse(r.rapportJson).missionsReellesComparables : undefined; } catch { /* rapport facultatif */ }
       const bilan = { scoreTotal: r.bilan.scoreTotal, fin: r.bilan.fin, scores: r.bilan.scores, causes: r.bilan.causes, recommandations: r.bilan.recommandations, missionsReelles };
       await this.commit({ ...this.m, server: { ...this.m.server!, act: r.acte, bilan } });
       this.onReady(this.m);
-    } catch (e) { this.setState({ status: 'error', error: e instanceof Error ? e.message : 'Clôture impossible.' }); }
+    } catch (e) { this.setState({ status: 'error', error: e instanceof Error ? e.message : t('Clôture impossible.') }); }
   }
   /** Lignes de score : bilan serveur (sur 1000, mode solo) ou aperçu local (sur 100). */
   lines = (m: MissionState = this.m): ScoreLine[] => {

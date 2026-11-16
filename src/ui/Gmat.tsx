@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { OrbitChoice } from '../domain/mission';
 import { elementsOf, MU_MOON, orbitMetrics, toCartesian, trueAnomalyAt } from '../domain/orbit';
 import { EPOCH, missionSeconds } from '../scene/sceneStore';
+import { t as tr } from '../i18n';
 
 const f = (v: number, d = 6) => v.toFixed(d).padStart(d + 6, ' ');
 const utc = (d: Date) => { const m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()];
@@ -18,11 +19,11 @@ export function GmatPanel({ orbit, dryMassKg, compact }: { orbit: OrbitChoice; d
     ['Altitude', f(r - 1737.4), 'km'], ['VMAG', f(v), 'km/s'], ['Period', f(m.periodS / 60, 4), 'min'], ['Energy', f(-MU_MOON / (2 * k.sma), 6), 'km²/s²'],
   ];
   const vec: [string, string][] = [['X', f(s.x)], ['Y', f(s.y)], ['Z', f(s.z)], ['VX', f(s.vx)], ['VY', f(s.vy)], ['VZ', f(s.vz)]];
-  return <div className="gmat" role="region" aria-label="Paramètres orbitaux (format GMAT)">
-    <div className="gmat-h"><span>TLL_Orbiter</span><span>MoonMJ2000Eq · LunaProp (2 corps)</span></div>
-    <div className="gmat-ep">UTCGregorian <b>{utc(new Date(EPOCH.getTime() + t * 1000))}</b></div>
+  return <div className="gmat" role="region" aria-label={tr("Paramètres orbitaux (format GMAT)")}>
+    <div className="gmat-h"><span>{tr("TLL_Orbiter")}</span><span>{tr("MoonMJ2000Eq · LunaProp (2 corps)")}</span></div>
+    <div className="gmat-ep">{tr("UTCGregorian")} <b>{utc(new Date(EPOCH.getTime() + t * 1000))}</b></div>
     <table><tbody>{rows.slice(0, compact ? 8 : rows.length).map(([a, b, c]) => <tr key={a}><th scope="row">{a}</th><td>{b}</td><td>{c}</td></tr>)}</tbody></table>
     {!compact && <table className="gmat-vec"><tbody>{[0, 3].map((i) => <tr key={i}>{vec.slice(i, i + 3).map(([a, b]) => <td key={a}><span>{a}</span>{b.trim()}</td>)}</tr>)}</tbody></table>}
-    {dryMassKg !== undefined && <div className="gmat-ep">DryMass <b>{dryMassKg.toFixed(3)} kg</b> · μ☾ {MU_MOON} km³/s²</div>}
+    {dryMassKg !== undefined && <div className="gmat-ep">{tr("DryMass")} <b>{dryMassKg.toFixed(3)} {tr("kg")}</b> · μ☾ {MU_MOON} {tr("km³/s²")}</div>}
   </div>;
 }

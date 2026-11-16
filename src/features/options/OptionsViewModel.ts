@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import { clearLocalProgress, DEFAULT_PREFS, loadPrefs, savePrefs, type Prefs } from '../../domain/preferences';
 import type { Navigator } from '../../domain/ports';
@@ -12,13 +13,13 @@ export class OptionsViewModel extends Store<OptionsState> {
     const prefs = { ...this.getState().prefs, [k]: v }; savePrefs(prefs);
     this.setState({ prefs, reloadNeeded: prefs.render !== this.initialRender, message: undefined });
   };
-  reset = () => { savePrefs({ ...DEFAULT_PREFS }); this.setState({ prefs: { ...DEFAULT_PREFS }, reloadNeeded: DEFAULT_PREFS.render !== this.initialRender, message: 'Réglages par défaut rétablis.' }); };
+  reset = () => { savePrefs({ ...DEFAULT_PREFS }); this.setState({ prefs: { ...DEFAULT_PREFS }, reloadNeeded: DEFAULT_PREFS.render !== this.initialRender, message: t('Réglages par défaut rétablis.') }); };
   reload = () => location.reload();
   askClear = () => this.setState({ confirmClear: true });
   cancelClear = () => this.setState({ confirmClear: false });
   /** Efface la progression enregistrée dans ce navigateur (les préférences sont conservées). */
-  clear = () => { clearLocalProgress(); this.setState({ confirmClear: false, message: 'Progression locale effacée. Une nouvelle mission repartira de zéro.' }); };
+  clear = () => { clearLocalProgress(); this.setState({ confirmClear: false, message: t('Progression locale effacée. Une nouvelle mission repartira de zéro.') }); };
   /** Mode connecté : abandonne le jeton invité ; une nouvelle session serveur sera créée. */
-  newSession = () => { try { localStorage.removeItem('tll.api.token'); localStorage.removeItem('tll.server.current'); } catch { /* */ } this.setState({ message: 'Nouvelle session invitée au prochain appel au serveur.' }); };
+  newSession = () => { try { localStorage.removeItem('tll.api.token'); localStorage.removeItem('tll.server.current'); } catch { /* */ } this.setState({ message: t('Nouvelle session invitée au prochain appel au serveur.') }); };
   back = () => this.nav.go('/');
 }

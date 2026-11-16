@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import type { GameMode } from '../../domain/campaign';
 import { RepositoryError, type CampaignRepository, type Navigator } from '../../domain/ports';
@@ -6,8 +7,8 @@ export interface ModeState { selected: GameMode | null; submitting: boolean; err
 
 /** « Confirmer » : un mode doit être choisi ; pas de double validation pendant la création. */
 export function confirmAvailability(s: ModeState): { enabled: boolean; reason?: string } {
-  if (s.submitting) return { enabled: false, reason: 'Création de la campagne…' };
-  if (!s.selected) return { enabled: false, reason: 'Choisissez un mode pour continuer.' };
+  if (s.submitting) return { enabled: false, reason: t('Création de la campagne…') };
+  if (!s.selected) return { enabled: false, reason: t('Choisissez un mode pour continuer.') };
   return { enabled: true };
 }
 
@@ -25,7 +26,7 @@ export class ModeSelectionViewModel extends Store<ModeState> {
     this.setState({ submitting: true, error: undefined });
     try {
       await this.repo.create(selected); // écrit CampaignState.mode côté backend
-      this.nav.go('/campagne/prologue');
+      this.nav.go('/campagne/recrue'); // la recrue se crée avant le prologue
     } catch (e) {
       this.setState({ submitting: false, error: e instanceof RepositoryError ? e.message : 'Erreur inattendue' });
     }

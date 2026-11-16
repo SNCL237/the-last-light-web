@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import { RepositoryError, type CampaignRepository, type EventRecorder, type Navigator, type ProfileCatalogRepository, type ScientificProfileRepository } from '../../domain/ports';
 import { estimate, MAX_SECONDARIES, relevantInstruments, type EliasDecision, type Estimate, type InstrumentId, type ObjectiveId, type ProfileCatalog } from '../../domain/profile';
@@ -29,11 +30,11 @@ export function eliasDelta(s: ProfileState): { without: Estimate; with: Estimate
 export function nextAvailability(s: ProfileState): Avail {
   if (s.submitting) return { enabled: false, reason: 'Enregistrement…' };
   if (s.step === 'selection') {
-    if (!s.primary) return { enabled: false, reason: 'Choix incomplet : sélectionnez un objectif principal.' };
-    if (s.secondaries.length === 0 && !s.noSecondaryByChoice) return { enabled: false, reason: 'Ajoutez 1 ou 2 objectifs secondaires, ou indiquez que vous n’en retenez aucun.' };
+    if (!s.primary) return { enabled: false, reason: t('Choix incomplet : sélectionnez un objectif principal.') };
+    if (s.secondaries.length === 0 && !s.noSecondaryByChoice) return { enabled: false, reason: t('Ajoutez 1 ou 2 objectifs secondaires, ou indiquez que vous n’en retenez aucun.') };
   }
-  if (s.step === 'elias' && !s.elias) return { enabled: false, reason: 'Décidez : conserver, écarter ou reporter l’instrument.' };
-  if (s.step === 'confirm' && (!s.primary || !s.elias)) return { enabled: false, reason: 'Profil incomplet : revenez aux étapes précédentes.' };
+  if (s.step === 'elias' && !s.elias) return { enabled: false, reason: t('Décidez : conserver, écarter ou reporter l’instrument.') };
+  if (s.step === 'confirm' && (!s.primary || !s.elias)) return { enabled: false, reason: t('Profil incomplet : revenez aux étapes précédentes.') };
   return { enabled: true };
 }
 
@@ -53,7 +54,7 @@ export class ProfileViewModel extends Store<ProfileState> {
       const catalog = await this.catalogs.getCatalog();
       this.campaignId = (await this.campaigns.getLatest().catch(() => null))?.id;
       this.setState({ status: 'ready', catalog });
-    } catch { this.setState({ status: 'error', error: 'Impossible de charger le profil scientifique.' }); }
+    } catch { this.setState({ status: 'error', error: t('Impossible de charger le profil scientifique.') }); }
   };
   retry = (): Promise<void> => { this.started = false; this.setState({ status: 'loading', error: undefined }); return this.init(); };
 
@@ -89,7 +90,7 @@ export class ProfileViewModel extends Store<ProfileState> {
   };
   secondaryAvailability = (id: ObjectiveId): Avail => {
     const s = this.getState();
-    if (id === s.primary) return { enabled: false, reason: 'Déjà objectif principal.' };
+    if (id === s.primary) return { enabled: false, reason: t('Déjà objectif principal.') };
     if (!s.secondaries.includes(id) && s.secondaries.length >= MAX_SECONDARIES) return { enabled: false, reason: `Maximum ${MAX_SECONDARIES} objectifs secondaires.` };
     return { enabled: true };
   };

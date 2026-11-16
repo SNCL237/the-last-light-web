@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { COMPONENTS, SINGLE_SLOTS, type Component, type MissionState, type SubsystemId } from '../../domain/mission';
 import { comp, incompatibility, subsystemCompleteness, totals, validate, type Issue } from '../../domain/sim';
 import { sceneStore } from '../../scene/sceneStore';
@@ -55,7 +56,7 @@ export class WorkshopViewModel extends MissionViewModel<WorkshopExtra> {
     if (m.launch?.launchedAt) { this.go('/campagne/acte-4/controle'); return; } // conception verrouillée
     if (!m.checkpoints.some((c) => c.id === 'act2')) {
       const { checkpoints: _c, ...snapshot } = m; void _c;
-      void this.commit({ ...m, checkpoints: [...m.checkpoints, { id: 'act2', label: 'Début de l’Acte II', at: new Date().toISOString(), snapshot }] });
+      void this.commit({ ...m, checkpoints: [...m.checkpoints, { id: 'act2', label: t('Début de l’Acte II'), at: new Date().toISOString(), snapshot }] });
     }
     const f = this.focus ? comp(this.focus) : undefined;
     if (f) this.setState({ subsystem: f.subsystem, inspected: f.id });
@@ -105,7 +106,7 @@ export class WorkshopViewModel extends MissionViewModel<WorkshopExtra> {
   installed = (id: string) => this.m.config.includes(id);
   reason = (c: Component): string | null => {
     if (this.installed(c.id)) return null;
-    if (this.srv) { const d = this.m.server?.report?.disponible.find((x) => x.id === c.id); return d && !d.disponible ? (d.raison ? messageFor(d.raison.code, d.raison.params) : 'Indisponible pour cette configuration.') : null; }
+    if (this.srv) { const d = this.m.server?.report?.disponible.find((x) => x.id === c.id); return d && !d.disponible ? (d.raison ? messageFor(d.raison.code, d.raison.params) : t('Indisponible pour cette configuration.')) : null; }
     return incompatibility(this.m.config, c);
   };
   /** Mode connecté : rejoue la différence de configuration sur le serveur (retraits puis ajouts). */
@@ -142,13 +143,13 @@ export class WorkshopViewModel extends MissionViewModel<WorkshopExtra> {
   };
   remove = (id: string) => { if (!this.installed(id)) return; const c = comp(id)!;
     const dependants = this.m.config.filter((x) => comp(x)?.requires === id);
-    void this.change(this.m.config.filter((x) => x !== id && !dependants.includes(x)), `Retrait : ${c.name}${dependants.length ? ' (et ce qui en dépend)' : ''}`, { action: 'remove', component: id }); };
+    void this.change(this.m.config.filter((x) => x !== id && !dependants.includes(x)), `Retrait : ${c.name}${dependants.length ? t(' (et ce qui en dépend)') : ''}`, { action: 'remove', component: id }); };
   undoLast = () => { const s = this.getState(); const prev = s.undo.at(-1); if (!prev) return; const cur = this.m.config;
     void this.change(prev, 'Annulation', { action: 'undo' }).then(() => this.setState({ undo: s.undo.slice(0, -1), redo: [...s.redo, cur], lastChange: null })); };
   redoLast = () => { const s = this.getState(); const nxt = s.redo.at(-1); if (!nxt) return; const cur = this.m.config;
-    void this.change(nxt, 'Rétablissement', { action: 'redo' }).then(() => this.setState({ redo: s.redo.slice(0, -1), undo: [...s.undo, cur], lastChange: null })); };
-  reset = () => void this.change([], 'Réinitialisation', { action: 'reset' });
-  applyPreset = () => void this.change(this.srv ? serverPreset(this.m) : presetFor(this.m), 'Preset recommandé', { action: 'preset' });
+    void this.change(nxt, t('Rétablissement'), { action: 'redo' }).then(() => this.setState({ redo: s.redo.slice(0, -1), undo: [...s.undo, cur], lastChange: null })); };
+  reset = () => void this.change([], t('Réinitialisation'), { action: 'reset' });
+  applyPreset = () => void this.change(this.srv ? serverPreset(this.m) : presetFor(this.m), t('Preset recommandé'), { action: 'preset' });
   readArchive = () => { this.setState({ archiveOpen: false }); void this.commit({ ...this.m, archiveRead: true }); };
   openArchive = () => this.setState({ archiveOpen: true });
 

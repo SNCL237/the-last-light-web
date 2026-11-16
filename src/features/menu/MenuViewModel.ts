@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import { type CampaignSummary, type RenderMode } from '../../domain/campaign';
 import { RepositoryError, type CampaignRepository, type CapabilitiesProvider, type Navigator } from '../../domain/ports';
@@ -13,7 +14,7 @@ export interface MenuState {
 /** « Continuer » : disponible uniquement si une sauvegarde exploitable existe ; sinon, une raison. */
 export function continueAvailability(s: MenuState): { enabled: boolean; reason?: string } {
   if (s.save) return { enabled: true };
-  return { enabled: false, reason: s.error ? `Sauvegarde indisponible : ${s.error}` : 'Aucune sauvegarde exploitable.' };
+  return { enabled: false, reason: s.error ? `${t('Sauvegarde indisponible :')} ${t(s.error)}` : t('Aucune sauvegarde exploitable.') };
 }
 
 export class MenuViewModel extends Store<MenuState> {

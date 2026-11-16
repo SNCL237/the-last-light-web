@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Icon } from './Icon';
 import { SaveIndicator } from './kit';
 import { applyPrefs as applyPrefsFrom, loadPrefs, savePrefs } from '../domain/preferences';
+import { t } from '../i18n';
 
 export const ACTS = [['I', 'Profil', '#/campagne/acte-1/profil'], ['II', 'Atelier', '#/campagne/acte-2/atelier'], ['III', 'Lancement', '#/campagne/acte-3/revue'],
   ['IV', 'Opérations', '#/campagne/acte-4/controle'], ['V', 'Crise', '#/campagne/acte-5/alerte'], ['VI', 'Bilan', '#/campagne/acte-6/rapport']] as const;
@@ -26,11 +27,11 @@ function useOverlay() {
 }
 function Prefs() {
   const [p, setP] = useState(loadPrefs); const set = (patch: Partial<typeof p>) => { const n = { ...p, ...patch }; setP(n); savePrefs(n); if (patch.render) location.reload(); };
-  return <fieldset className="prefs"><legend>Réglages rapides</legend>
-    <label className="chk"><input type="checkbox" checked={p.render === '2d'} onChange={(e) => set({ render: e.target.checked ? '2d' : '3d' })} /> Repli 2D (sans 3D)</label>
-    <label className="chk"><input type="checkbox" checked={p.solid} onChange={(e) => set({ solid: e.target.checked })} /> Réduire la transparence</label>
-    <label className="chk"><input type="checkbox" checked={p.contrast} onChange={(e) => set({ contrast: e.target.checked })} /> Contraste renforcé</label>
-    <a className="btn2 btn2--ghost btn2--sm" href="#/options">Toutes les options</a></fieldset>;
+  return <fieldset className="prefs"><legend>{t("Réglages rapides")}</legend>
+    <label className="chk"><input type="checkbox" checked={p.render === '2d'} onChange={(e) => set({ render: e.target.checked ? '2d' : '3d' })} /> {t("Repli 2D (sans 3D)")}</label>
+    <label className="chk"><input type="checkbox" checked={p.solid} onChange={(e) => set({ solid: e.target.checked })} /> {t("Réduire la transparence")}</label>
+    <label className="chk"><input type="checkbox" checked={p.contrast} onChange={(e) => set({ contrast: e.target.checked })} /> {t("Contraste renforcé")}</label>
+    <a className="btn2 btn2--ghost btn2--sm" href="#/options">{t("Toutes les options")}</a></fieldset>;
 }
 /** Conservé pour compatibilité : applique les préférences enregistrées. */
 export function applyPrefs() { applyPrefsFrom(loadPrefs()); }
@@ -44,12 +45,12 @@ export function Shell({ act, step, save, left, right, bottom, center, banner, mo
   const [open, setOpen] = useOverlay(); const [q, setQ] = useState('');
   return <div className={`shell2${wide ? ' shell2--wide' : ''}`} data-mood={mood}>
     <header className="top2">
-      <a href="#/" className="word" aria-label="THE LAST LIGHT — menu principal">THE LAST LIGHT<span>Acte {ACTS[act - 1]?.[0]} · {step}</span></a>
-      <nav className="seg" aria-label="Progression des actes">{ACTS.map(([n, l], i) => <span key={n} className={`seg-i${i + 1 === act ? ' is-on' : i + 1 < act ? ' is-done' : ''}`} aria-current={i + 1 === act ? 'step' : undefined}>{i + 1 < act && <Icon name="check" size={11} />}{n} · {l}</span>)}</nav>
+      <a href="#/" className="word" aria-label={t("THE LAST LIGHT — menu principal")}>{t("THE LAST LIGHT")}<span>{t("Acte")} {ACTS[act - 1]?.[0]} · {t(step)}</span></a>
+      <nav className="seg" aria-label={t("Progression des actes")}>{ACTS.map(([n, l], i) => <span key={n} className={`seg-i${i + 1 === act ? ' is-on' : i + 1 < act ? ' is-done' : ''}`} aria-current={i + 1 === act ? 'step' : undefined}>{i + 1 < act && <Icon name="check" size={11} />}{n} · {t(l)}</span>)}</nav>
       <div className="svc">{save && <SaveIndicator status={save} />}
-        <button className="ic" onClick={() => setOpen('journal')} aria-label="Journal"><Icon name="log" /></button>
-        <button className="ic" onClick={() => setOpen('help')} aria-label="Glossaire et aide"><Icon name="help" /></button>
-        <button className="ic" onClick={() => setOpen('pause')} aria-label="Pause (Échap)"><Icon name="pause" /></button></div>
+        <button className="ic" onClick={() => setOpen('journal')} aria-label={t("Journal")}><Icon name="log" /></button>
+        <button className="ic" onClick={() => setOpen('help')} aria-label={t("Glossaire et aide")}><Icon name="help" /></button>
+        <button className="ic" onClick={() => setOpen('pause')} aria-label={t("Pause (Échap)")}><Icon name="pause" /></button></div>
     </header>
     {banner && <div className="banner-row">{banner}</div>}
     {left && <aside className="left2">{left}</aside>}
@@ -57,12 +58,12 @@ export function Shell({ act, step, save, left, right, bottom, center, banner, mo
     {right && <aside className="right2">{right}</aside>}
     {bottom && <footer className="bottom2">{bottom}</footer>}
     {open && <div className="veil2" onClick={(e) => { if (e.target === e.currentTarget) setOpen(null); }}>
-      <div className="glass modal" role="dialog" aria-modal="true" aria-label={open === 'pause' ? 'Pause' : open === 'help' ? 'Glossaire' : 'Journal'}>
-        <header className="glass-h"><h2>{open === 'pause' ? 'Pause' : open === 'help' ? 'Glossaire et aide' : 'Journal de mission'}</h2><button className="ic" onClick={() => setOpen(null)} aria-label="Fermer"><Icon name="x" /></button></header>
-        {open === 'pause' && <div className="stack2"><button className="btn2 btn2--primary" autoFocus onClick={() => setOpen(null)}>Reprendre</button><Prefs /><a className="btn2 btn2--ghost" href="#/">Menu principal (progression sauvegardée)</a></div>}
-        {open === 'help' && <div className="stack2"><input className="field" placeholder="Rechercher un terme…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Rechercher un terme" autoFocus />
-          <dl className="gloss">{GLOSSARY.filter(([t, d]) => (t + d).toLowerCase().includes(q.toLowerCase())).map(([t, d]) => <div key={t}><dt>{t}</dt><dd>{d}</dd></div>)}</dl></div>}
-        {open === 'journal' && (journal.length ? <ol className="journal">{journal.map((j, i) => <li key={i}><span>{j.t}</span>{j.text}</li>)}</ol> : <p className="muted">Aucune entrée pour l&apos;instant.</p>)}
+      <div className="glass modal" role="dialog" aria-modal="true" aria-label={open === 'pause' ? 'Pause' : open === 'help' ? t('Glossaire') : t('Journal')}>
+        <header className="glass-h"><h2>{open === 'pause' ? 'Pause' : open === 'help' ? t('Glossaire et aide') : t('Journal de mission')}</h2><button className="ic" onClick={() => setOpen(null)} aria-label={t("Fermer")}><Icon name="x" /></button></header>
+        {open === 'pause' && <div className="stack2"><button className="btn2 btn2--primary" autoFocus onClick={() => setOpen(null)}>{t("Reprendre")}</button><Prefs /><a className="btn2 btn2--ghost" href="#/">{t("Menu principal (progression sauvegardée)")}</a></div>}
+        {open === 'help' && <div className="stack2"><input className="field" placeholder={t("Rechercher un terme…")} value={q} onChange={(e) => setQ(e.target.value)} aria-label={t("Rechercher un terme")} autoFocus />
+          <dl className="gloss">{GLOSSARY.map(([term, def]) => [t(term), t(def)]).filter(([term, def]) => (term + def).toLowerCase().includes(q.toLowerCase())).map(([term, def]) => <div key={term}><dt>{term}</dt><dd>{def}</dd></div>)}</dl></div>}
+        {open === 'journal' && (journal.length ? <ol className="journal">{journal.map((j, i) => <li key={i}><span>{j.t}</span>{t(j.text)}</li>)}</ol> : <p className="muted">{t("Aucune entrée pour l'instant.")}</p>)}
       </div></div>}
   </div>;
 }

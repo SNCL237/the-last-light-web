@@ -1,7 +1,9 @@
+import { setLang } from '../i18n';
+
 /** Préférences du joueur (P04), stockées dans le navigateur et appliquées en direct. */
 export interface Prefs {
   render: '3d' | '2d'; quality: 'auto' | 'high' | 'low'; fpsCap: 60 | 30; gmat: boolean;
-  contrast: boolean; solid: boolean; motion: 'system' | 'reduce' | 'full'; uiScale: 90 | 100 | 115 | 130; help: boolean; lang: 'fr';
+  contrast: boolean; solid: boolean; motion: 'system' | 'reduce' | 'full'; uiScale: 90 | 100 | 115 | 130; help: boolean; lang: 'fr' | 'en';
 }
 export const DEFAULT_PREFS: Prefs = { render: '3d', quality: 'auto', fpsCap: 60, gmat: true, contrast: false, solid: false, motion: 'system', uiScale: 100, help: true, lang: 'fr' };
 const KEY = 'tll.prefs';
@@ -28,7 +30,7 @@ export function savePrefs(p: Prefs): void {
 export function applyPrefs(p: Prefs = loadPrefs()): void {
   const r = document.documentElement;
   r.dataset.contrast = p.contrast ? '1' : '0'; r.dataset.solid = p.solid ? '1' : '0'; r.dataset.motion = p.motion; r.dataset.scale = String(p.uiScale); r.dataset.gmat = p.gmat ? '1' : '0';
-  r.lang = p.lang;
+  r.lang = p.lang === 'en' ? 'en-US' : 'fr'; setLang(p.lang);
 }
 /** Animations réduites : réglage explicite, sinon préférence du système. */
 export function reducedMotion(p: Prefs = loadPrefs()): boolean {

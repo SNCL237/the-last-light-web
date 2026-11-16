@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import { CREDITED_STATUSES, isInternal, manifestIssues, type AssetEntry } from '../../domain/assets';
 import { RepositoryError, type AssetManifestRepository, type Navigator } from '../../domain/ports';
@@ -30,7 +31,7 @@ export class CreditsViewModel extends Store<CreditsState> {
       const entries = await this.repo.getAll();
       this.setState({ status: 'ready', entries, issues: this.dev ? manifestIssues(entries) : [] });
     } catch (e) {
-      this.setState({ status: 'error', error: e instanceof RepositoryError ? e.message : 'Impossible de charger les crédits.' });
+      this.setState({ status: 'error', error: e instanceof RepositoryError ? e.message : t('Impossible de charger les crédits.') });
     }
   };
 }

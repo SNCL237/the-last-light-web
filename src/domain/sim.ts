@@ -1,3 +1,4 @@
+import { t as tr, tf } from '../i18n';
 import { BUDGET_M, BUS_HOUSEKEEPING_W, COMPONENTS, LAUNCHERS, ORBIT_PRESETS, RADAR_PEAK_W, SINGLE_SLOTS, SUBSYSTEMS,
   type Component, type CrisisOption, type CycleRecord, type EndingId, type FinalState, type MissionState, type OrbitChoice, type SubsystemId } from './mission';
 import { orbitMetrics } from './orbit';
@@ -216,10 +217,10 @@ export function score(s: MissionState): ScoreLine[] {
   const budgetMargin = lv ? (BUDGET_M - t.costM - lv.costM) / BUDGET_M : 0;
   const massMargin = lv ? (lv.capacityKg - t.massKg) / lv.capacityKg : 0;
   const lines: ScoreLine[] = [
-    { category: 'Science', max: 35, points: Math.round(20 * p + 15 * secAvg), why: [`Objectif principal atteint à ${Math.round(p * 100)} % (20 pts max).`, sec.length ? `Objectifs secondaires : ${Math.round(secAvg * 100)} % en moyenne (15 pts max).` : 'Aucun objectif secondaire retenu : 15 pts acquis (choix assumé).'] },
-    { category: 'Technique', max: 20, points: fs === 'stable' ? 20 : fs === 'degraded' ? 12 : 4, why: [`État final : ${fs === 'stable' ? 'stable' : fs === 'degraded' ? 'dégradé durable' : 'perte irrécupérable'}.`] },
-    { category: 'Données', max: 20, points: Math.round(20 * Math.min(1, ratio)), why: [`${s.ops.transmitted} Go transmis sur ${s.ops.produced} Go produits ; ${s.ops.lost} Go perdus.`] },
-    { category: 'Ressources', max: 10, points: Math.round(5 * Math.max(0, Math.min(1, budgetMargin * 5)) + 5 * Math.max(0, Math.min(1, massMargin * 4))), why: [`Marge budgétaire ${Math.round(budgetMargin * 100)} %.`, `Marge de masse lanceur ${Math.round(massMargin * 100)} %.`] },
+    { category: 'Science', max: 35, points: Math.round(20 * p + 15 * secAvg), why: [tf('Objectif principal atteint à {p} % (20 pts max).', { p: Math.round(p * 100) }), sec.length ? tf('Objectifs secondaires : {p} % en moyenne (15 pts max).', { p: Math.round(secAvg * 100) }) : 'Aucun objectif secondaire retenu : 15 pts acquis (choix assumé).'] },
+    { category: 'Technique', max: 20, points: fs === 'stable' ? 20 : fs === 'degraded' ? 12 : 4, why: [tf('État final : {s}.', { s: tr(fs === 'stable' ? 'stable' : fs === 'degraded' ? 'dégradé durable' : 'perte irrécupérable') })] },
+    { category: 'Données', max: 20, points: Math.round(20 * Math.min(1, ratio)), why: [tf('{a} Go transmis sur {b} Go produits ; {c} Go perdus.', { a: s.ops.transmitted, b: s.ops.produced, c: s.ops.lost })] },
+    { category: 'Ressources', max: 10, points: Math.round(5 * Math.max(0, Math.min(1, budgetMargin * 5)) + 5 * Math.max(0, Math.min(1, massMargin * 4))), why: [tf('Marge budgétaire {p} %.', { p: Math.round(budgetMargin * 100) }), tf('Marge de masse lanceur {p} %.', { p: Math.round(massMargin * 100) })] },
     { category: 'Décisions', max: 15, points: (s.archiveRead ? 3 : 0) + (s.peakHandled ? 5 : 0) + (s.checkpoints.some((c) => c.id === 'pre-launch') ? 2 : 0) + (s.crisis && s.crisis.finalState !== 'loss' ? 5 : 0), why: [
       s.archiveRead ? 'Archive d’Elias consultée (+3).' : 'Archive d’Elias non consultée.',
       s.peakHandled ? 'Pire cas énergétique traité à la conception (+5).' : 'Pire cas énergétique non traité.',

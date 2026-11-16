@@ -28,6 +28,8 @@ import { ServerGateway } from '../data/backend/ServerGateway';
 import { ServerCampaignRepository, ServerScientificProfileRepository } from '../data/backend/ServerRepositories';
 import { OptionsViewModel } from '../features/options/OptionsViewModel';
 import { ReportsViewModel } from '../features/reports/ReportsViewModel';
+import { RecruitViewModel } from '../features/recruit/RecruitViewModel';
+import { loadRecruit } from '../domain/recruit';
 import { ModeSelectionViewModel } from '../features/mode/ModeSelectionViewModel';
 
 /** Seul endroit qui choisit les implémentations : brancher le backend = changer ici (ou via .env). */
@@ -67,10 +69,14 @@ export function createContainer() {
     /** F-10 : reprise à la dernière page atteinte ; sinon au début de l'acte enregistré. */
     async resumeRoute(): Promise<string> {
       const c = await campaigns.getLatest().catch(() => null); if (!c) return '/';
-      const m = await missions.load(c.id).catch(() => null); if (m) return ROUTES[m.reached];
+      const m = await missions.load(c.id).catch(() => null);
+      // Sauvegarde antérieure à la création de recrue : on la demande avant de reprendre.
+      if (!loadRecruit(c.id)) return `/campagne/recrue?retour=${encodeURIComponent(m ? ROUTES[m.reached] : '/campagne/prologue')}`;
+      if (m) return ROUTES[m.reached];
       if (await profiles.load(c.id).catch(() => null)) return ROUTES[0];
       return ({ 0: '/campagne/prologue', 1: '/campagne/acte-1/profil' } as Record<number, string>)[c.currentAct] ?? '/campagne/prologue';
     },
+    createRecruit: (returnTo?: string) => new RecruitViewModel(campaigns, missions, nav, returnTo),
     createOptions: () => new OptionsViewModel(nav, gateway ? (env.VITE_API_URL as string) : undefined),
     createReports: () => new ReportsViewModel(reports, gateway),
     createWorkshop: (step: 'design' | 'validation', focus?: string) => new WorkshopViewModel(deps, step, focus),

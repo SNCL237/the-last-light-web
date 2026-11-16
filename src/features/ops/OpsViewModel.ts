@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { COMPONENTS, type CycleRecord, type MissionState, type ServerSnapshot } from '../../domain/mission';
 import { OBJECTIVE_IDS, summarizeEtat } from '../../data/backend/ServerGateway';
 import type { ObjectiveId } from '../../domain/profile';
@@ -36,10 +37,10 @@ export class OpsViewModel extends MissionViewModel<OpsExtra> {
   setTab = (tab: OpsExtra['tab']) => this.setState({ tab });
   setFF = (n: number) => this.setState({ ffN: Math.max(1, Math.min(5, n)) });
   planAvailability() {
-    if (this.critical) return { ok: false, reason: 'Alerte critique en cours : ouvrez l’alerte.' };
-    if (this.srv) return this.m.server?.etat?.terminee ? { ok: false, reason: 'Simulation terminée.' } : { ok: true };
-    const f = this.forecast; if (this.getState().plan.txWindows > MAX_WINDOWS) return { ok: false, reason: 'Trop de fenêtres.' };
-    if (f.batteryAfter <= 0) return { ok: false, reason: 'Plan non tenable : la batterie serait vide (réserve non respectée).' };
+    if (this.critical) return { ok: false, reason: t('Alerte critique en cours : ouvrez l’alerte.') };
+    if (this.srv) return this.m.server?.etat?.terminee ? { ok: false, reason: t('Simulation terminée.') } : { ok: true };
+    const f = this.forecast; if (this.getState().plan.txWindows > MAX_WINDOWS) return { ok: false, reason: t('Trop de fenêtres.') };
+    if (f.batteryAfter <= 0) return { ok: false, reason: t('Plan non tenable : la batterie serait vide (réserve non respectée).') };
     return { ok: true };
   }
   openPlanner = () => void this.goTo('/campagne/acte-4/planificateur');
@@ -57,7 +58,7 @@ export class OpsViewModel extends MissionViewModel<OpsExtra> {
         this.record({ code: 'EVT-A4-001', trace: 'cycle_executed', data: { cycle: c.n, server: true } });
         if (c.clue) this.record({ code: 'EVT-A4-004', trace: 'anomaly_clue', data: { cycle: c.n, clue: c.clue } });
         if (after.crise) { stop = `Avance interrompue au jour ${after.jour} : décision de crise attendue.`; break; }
-        if (after.terminee) { stop = 'Simulation terminée.'; break; }
+        if (after.terminee) { stop = t('Simulation terminée.'); break; }
       }
     } catch (e) { await this.commit(st); this.fail(e); return; }
     this.setState({ interrupted: stop }); await this.goTo('/campagne/acte-4/bilan', { ops: st.ops, server: st.server });

@@ -1,7 +1,9 @@
+import { t } from '../../i18n';
 import { Store } from '../../core/Store';
 import { ROUTES, type MissionRoute, type MissionState } from '../../domain/mission';
 import type { GameEvent } from '../../domain/narrative';
 import { readPointer } from '../../data/backend/ServerRepositories';
+import { recruitStore } from '../../domain/recruit';
 import type { ServerGateway } from '../../data/backend/ServerGateway';
 import { ApiError } from '../../data/backend/api';
 import { RepositoryError, type CampaignRepository, type EventRecorder, type MissionRepository, type Navigator, type ScientificProfileRepository } from '../../domain/ports';
@@ -27,7 +29,7 @@ export abstract class MissionViewModel<X> extends Store<BaseState & X> {
     try {
       const c = await this.d.campaigns.getLatest();
       if (!c) { this.d.nav.go('/'); return; }
-      this.campaignId = c.id;
+      this.campaignId = c.id; recruitStore.load(c.id);
       let m = await this.d.missions.load(c.id);
       if (!m) {
         const p = await this.d.profiles.load(c.id);
@@ -40,7 +42,7 @@ export abstract class MissionViewModel<X> extends Store<BaseState & X> {
       }
       this.setState({ status: 'ready', mission: m } as Partial<BaseState & X>);
       this.onReady(m);
-    } catch (e) { this.setState({ status: 'error', error: e instanceof ApiError ? e.message : 'Impossible de charger la mission.' } as Partial<BaseState & X>); }
+    } catch (e) { this.setState({ status: 'error', error: e instanceof ApiError ? e.message : t('Impossible de charger la mission.') } as Partial<BaseState & X>); }
   };
   /** Mode connecté actif pour cette mission. */
   protected get srv(): ServerGateway | undefined { return this.d.server && this.getState().mission?.server ? this.d.server : undefined; }
